@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace twozerofoureight
 {
@@ -13,8 +12,8 @@ namespace twozerofoureight
         protected int[,] board;
         protected Random rand;
         protected int[] range;
-
-
+        
+        int s1 = 0;
 
         public TwoZeroFourEightModel() : this(4)
         {
@@ -67,11 +66,15 @@ namespace twozerofoureight
             {
                 if (buffer[k] != 0) // nonempty slot
                 {
+
                     // check if we can merge with the previous slot
                     if (pos > 0 && pos - 1 > lastMergedSlot && buffer[pos - 1] == buffer[k])
                     {
                         // merge
+                          
                         buffer[pos - 1] *= 2;
+                        //GetScore(buffer[pos-1]);                                         
+                    
                         buffer[k] = 0;
                         lastMergedSlot = pos - 1;
                         changed = true;
@@ -195,37 +198,12 @@ namespace twozerofoureight
             }
             HandleChanges(changed);
         }
-
-
-        public int GetScore()
-        {
-            int score = 0;
-            foreach(int s in GetBoard())
-            {
-                score += s;
-            }
-            return score;
-        }
-
-        public bool GameWin()
-        {
-            bool isgamewin = false;
-            foreach(int i in GetBoard())
-            {
-                if (i == 2048)
-                {
-                    isgamewin = true;
-                }
-
-            }
-            return isgamewin;
-        }
-
         public bool GameFull()
         {
             bool isGameOver = false;
             int count = 0;
             int tmp_count = 0;
+            //Check left
             foreach (int i in range)
             {
                 int[] buffer = new int[boardSize];
@@ -244,7 +222,7 @@ namespace twozerofoureight
             }
             tmp_count = 0;
 
-            //*****
+            //Check rigth
             foreach (int i in range)
             {
                 int[] buffer = new int[boardSize];
@@ -263,13 +241,13 @@ namespace twozerofoureight
 
             }
             tmp_count = 0;
-            //up
+            //Check up
             foreach (int i in range)
             {
                 int[] buffer = new int[boardSize];
                 foreach (int j in range)
                 {
-                    buffer[j] = board[i, j];
+                    buffer[j] = board[j, i];
                 }
                 if (!ShiftAndMerge(buffer))
                 {
@@ -280,14 +258,14 @@ namespace twozerofoureight
                     count++;
                 }
             }
-            //down
+            //Check down
             tmp_count = 0;
             foreach (int i in range)
             {
                 int[] buffer = new int[boardSize];
                 foreach (int j in range)
                 {
-                    buffer[boardSize - j - 1] = board[i, j];
+                    buffer[boardSize - j - 1] = board[j, i];
                 }
                 if (!ShiftAndMerge(buffer))
                 {
@@ -305,56 +283,18 @@ namespace twozerofoureight
             }
             return isGameOver;
         }
-        /*
-        public bool isgameover() 
-           {
-            for(int i=0;i<4;i++)
-            {
-                for(int j=0;j<4;j++){
-                    if(i==3 ||j == 3)
-                    {
-                        if(i==3 && j != 3)
-                        {
-                            if (board[i, j] == board[i, j + 1])
-                            {
-                                return false;
-                            }
-                         
-                        }
-                        if (j == 3 && i != 3)
-                        {
-                            if(board[i,j]==board[i+1,j])
-                            {
-                                return false;                  
-                            }
-                        }
-                    }   else if (board[i, j] == board[i, j + 1] || board[i, j] == board[i + 1, j])
-                    {
-                        return false;
-                    }
-                    
-                }
-            }
-            MessageBox.Show("GAMEOVER GG");
-            return true;
-           }
-           */
-              
-
-
-       /* public bool Gameoverlose()
+        public int GetScore() 
         {
-            bool isover = false;
-            foreach(int i in range)
+            int score = 0;
+            for (int i = 0; i < boardSize; i++)
             {
-                int[] buf = new int[boardSize];
-                foreach(int j in range)
+                for (int j = 0; j < boardSize; j++)
                 {
-                    buf[i] = board[i,j];
+                    score += board[i, j];
                 }
-
             }
-        }*/
-
+            return score;
+        }
+        
     }
 }

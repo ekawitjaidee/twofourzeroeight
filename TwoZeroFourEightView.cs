@@ -30,15 +30,8 @@ namespace twozerofoureight
         public void Notify(Model m)
         {
             UpdateBoard(((TwoZeroFourEightModel)m).GetBoard());
-            UpdateScore(((TwoZeroFourEightModel)m).GetScore());
-            if (((TwoZeroFourEightModel)m).GameWin())
-            {
-                UpdateGameWin(((TwoZeroFourEightModel)m).GameWin());
-            }
-            else
-            {
-                UpdateGameFull(((TwoZeroFourEightModel)m).GameFull());
-            }
+            UpdateGameFull(((TwoZeroFourEightModel)m).GameFull());
+      
         }
 
         private void UpdateTile(Label l, int i)
@@ -54,16 +47,19 @@ namespace twozerofoureight
             switch (i)
             {
                 case 0:
-                    l.BackColor = Color.Red;
+                    l.BackColor = Color.GreenYellow;
                     break;
                 case 2:
-                    l.BackColor = Color.DarkGray;
+                    l.BackColor = Color.Black;
                     break;
                 case 4:
                     l.BackColor = Color.Orange;
                     break;
                 case 8:
                     l.BackColor = Color.Red;
+                    break;
+                case 16:
+                    l.BackColor = Color.LightGreen;
                     break;
                 default:
                     l.BackColor = Color.Green;
@@ -88,35 +84,22 @@ namespace twozerofoureight
             UpdateTile(lbl31, board[3, 1]);
             UpdateTile(lbl32, board[3, 2]);
             UpdateTile(lbl33, board[3, 3]);
+            label1.Text = Convert.ToString(((TwoZeroFourEightModel)model).GetScore());
         }
 
-        private void UpdateScore(int score)
-        {
-            label1.Text = score.ToString();
-        }
-
-        private void UpdateGameWin(bool isWin)
-        {
-            if(isWin)
-            {
-                label2.Text = "You Win";
-            }
-            else
-            {
-                label2.Text = "";
-            }
-        }
         private void UpdateGameFull(bool isFull)
         {
             if (isFull)
             {
-                label2.Text = "Game Over";
+                MessageBox.Show( "Game Over");
             }
             else
             {
                 label2.Text = "";
             }
         }
+
+
 
         private void btnLeft_Click(object sender, EventArgs e)
         {
@@ -163,5 +146,7 @@ namespace twozerofoureight
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        
     }
 }
